@@ -2,8 +2,8 @@
 *
 
 # Bu dizinler haric
-!/nvim/
-!/kitty/
+!/nvim
+!/kitty
 
 # Bu dosya haric
 !/.gitignore
