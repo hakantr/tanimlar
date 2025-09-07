@@ -1,0 +1,9 @@
+# Herşeyi görmezden gel.
+*
+
+# Bu dizinler haric
+!/nvim/
+!/kitty/
+
+# Bu dosya haric
+!/.gitignore
