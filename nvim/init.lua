@@ -1,5 +1,5 @@
 -- ╔══════════════════════════════════════════════════════════════════╗
--- ║  Neovim 0.11.3 — init.lua                                     ║
+-- ║  Neovim 0.11.6 — init.lua                                     ║
 -- ║  Diller: Rust · Python · TypeScript · HTML · CSS · SQL         ║
 -- ║  Kaydet: ~/.config/nvim/init.lua                               ║
 -- ╚══════════════════════════════════════════════════════════════════╝
@@ -44,7 +44,7 @@ opt.wrap           = false
 opt.swapfile       = false
 opt.backup         = false
 opt.undofile       = true
-opt.hlsearch       = false
+opt.hlsearch       = true
 opt.incsearch      = true
 opt.termguicolors  = true
 opt.scrolloff      = 8
@@ -106,9 +106,9 @@ local function setup_dracula_pro()
     yellow   = "#ffff80", blue    = "#9580ff", magenta = "#ff80bf",
     cyan     = "#80ffea", white_b = "#ffffff",
   }
-  vim.g.colors_name = "dracula-pro"
   vim.cmd("hi clear")
   if vim.fn.exists("syntax_on") == 1 then vim.cmd("syntax reset") end
+  vim.g.colors_name = "dracula-pro"
 
   local hi = function(g, v) vim.api.nvim_set_hl(0, g, v) end
 
@@ -156,7 +156,7 @@ local function setup_dracula_pro()
   hi("@punctuation",    { fg = c.fg })
   hi("@operator",       { fg = c.magenta })
   hi("@property",       { fg = c.fg })
-  hi("@parameter",      { fg = c.fg, italic = true })
+  hi("@variable.parameter", { fg = c.fg, italic = true })
   hi("@tag",            { fg = c.red })
   hi("@tag.attribute",  { fg = c.blue })
   hi("@tag.delimiter",  { fg = c.fg })
@@ -191,14 +191,7 @@ end
 -- ━━━━━━━━━━━━━━━━━━  EKLENTİLER  ━━━━━━━━━━━━━━━━━━━━
 require("lazy").setup({
 
-  -- ── Tema ──────────────────────────────────────────
-  {
-    "dracula/vim",
-    name = "dracula-pro",
-    lazy = false,
-    priority = 1000,
-    config = setup_dracula_pro,
-  },
+  -- ── Tema: setup_dracula_pro() lazy.setup sonrasında çağrılır ──
 
   -- ── Treesitter (YENİ main branch API) ─────────────
   {
@@ -360,10 +353,7 @@ require("lazy").setup({
           Lua = {
             runtime = { version = "LuaJIT" },
             diagnostics = { globals = { "vim" } },
-            workspace = {
-              library = vim.api.nvim_get_runtime_file("", true),
-              checkThirdParty = false,
-            },
+            workspace = { checkThirdParty = false },
             telemetry = { enable = false },
             hint = { enable = true },
           },
@@ -402,7 +392,6 @@ require("lazy").setup({
           documentation = cmp.config.window.bordered(),
         },
         preselect = cmp.PreselectMode.None,
-        completion = { completeopt = "menu,menuone,noselect" },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"]     = cmp.mapping.scroll_docs(-4),
           ["<C-f>"]     = cmp.mapping.scroll_docs(4),
@@ -561,9 +550,6 @@ require("lazy").setup({
       require("cmp").event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done())
     end,
   },
-
-  -- ── Yorum ────────────────────────────────────────
-  { "numToStr/Comment.nvim", event = "BufReadPost", config = function() require("Comment").setup() end },
 
   -- ── Renk gösterimi ───────────────────────────────
   { "NvChad/nvim-colorizer.lua", event = "BufReadPost", config = function() require("colorizer").setup() end },
@@ -741,6 +727,9 @@ require("lazy").setup({
   checker = { enabled = true, notify = false },
   change_detection = { notify = false },
 })
+
+-- Dracula Pro tema (harici eklenti gerekmez, tamamen Lua'da tanımlı)
+setup_dracula_pro()
 
 -- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 -- ━━━━━━━━━━━━━━  KAPSAMLI TUŞLAMA (KEYMAP)  ━━━━━━━━━━━━━━
